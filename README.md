@@ -51,7 +51,7 @@
 
 Project Screenshots:
 
-![Contact-Manager-MAUI](https://github.com/kashifmakhdoom/Contact-Manager-MAUI/Contman-Screenshot.png)
+![Contact-Manager-MAUI](https://github.com/kashifmakhdoom/Contact-Manager-MAUI/blob/master/Contman.MAUI/Contman-Screenshot.png)
 
 Contact Manager is a MAUI based mobile CRUD application for managing contacts.
 
