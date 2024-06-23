@@ -4,8 +4,6 @@
              xmlns:controls="clr-namespace:Contman.MAUI.Views.Controls"
              x:Class="Contman.MAUI.Views.AddContact"
              Title="Add New Contact">
-    <controls:ContactControl x:Name="ctrlContact" 
-        OnSave="ctrlContact_OnSave"
-        OnCancel="ctrlContact_OnCancel"
-        OnError="ctrlContact_OnError" />
+    <controls:ContactControl
+        BindingContext="{Binding .}" />
 </ContentPage>

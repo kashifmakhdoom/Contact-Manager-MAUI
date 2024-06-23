@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Contman.MAUI.ViewModels"
+             xmlns:m="clr-namespace:Contman.Core.Models;assembly=Contman.Core"
+             x:DataType="vm:ContactListViewModel"
              x:Class="Contman.MAUI.Views.ContactList"
              Title="Contact List">
     <Grid Padding="5" 
@@ -8,36 +11,52 @@
           ColumnDefinitions="*"
           >
         <SearchBar x:Name="SearchBar" Grid.Row="0" Grid.Column="0"
-                   Placeholder="Search contact"
-                   TextChanged="SearchBar_TextChanged"></SearchBar>
-        <ListView Grid.Row="1" Grid.Column="0" BackgroundColor="Transparent" 
-          x:Name="lsvContactList"
-          RowHeight="60"
-          SeparatorColor="DarkGray"
-          ItemSelected="lsvContactList_ItemSelected"
-          ItemTapped="lsvContactList_ItemTapped">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <TextCell Text="{Binding Name}" 
-                              Detail="{Binding Email}">
-                        <TextCell.ContextActions>
-                            <MenuItem Text="Remove" 
-                                      IsDestructive="True" 
-                                      Clicked="MenuItem_DeleteClicked"
-                                      CommandParameter="{Binding .}"
-                                      />
-                        </TextCell.ContextActions>
-                    </TextCell>
+                   Placeholder="Search contact" Text="{Binding FilterText}"></SearchBar>
+        <CollectionView x:Name="ContactCollection"
+            ItemsSource="{Binding ContactList}" 
+                        Grid.Row="1" Grid.Column="0">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="m:Contact">
+                    <StackLayout>
+                        <SwipeView>
+                            <SwipeView.RightItems>
+                                <SwipeItems>
+                                    <SwipeItem Text="Delete"
+                                               IsDestructive="True"
+                                               BackgroundColor="Red"
+                                               Command="{Binding Source={x:Reference ContactCollection}, Path=BindingContext.DeleteContactCommand}"
+                                               CommandParameter="{Binding Id}">
+
+                                    </SwipeItem>
+                                    <SwipeItem Text="Edit"
+                                               IsDestructive="False"
+                                               BackgroundColor="Green"
+                                               Command="{Binding Source={x:Reference ContactCollection}, Path=BindingContext.GoToEditContactCommand}"
+                                               CommandParameter="{Binding Id}">
+
+                                    </SwipeItem>
+                                </SwipeItems>
+                            </SwipeView.RightItems>
+                            <StackLayout>
+                                <Frame Margin="0,5,0,5">
+                                    <StackLayout Orientation="Vertical">
+                                        <Label Text="{Binding Name}" />
+                                        <Label Text="{Binding Email}" />
+                                        <Label Text="{Binding Phone}" />
+                                    </StackLayout>
+                                </Frame>
+                            </StackLayout>
+                        </SwipeView>
+                    </StackLayout>
                 </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
 
         <Button 
             Grid.Row="2" 
             Grid.Column="0" 
-            x:Name="btnAdd" 
             Text="Add Contact" 
-            Clicked="btnAdd_Clicked" />
+            Command="{Binding GoToAddContactCommand}" />
     </Grid>
 
 </ContentPage>

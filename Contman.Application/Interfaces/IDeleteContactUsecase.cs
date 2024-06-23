@@ -4,6 +4,6 @@ namespace Contman.Application.Interfaces
 {
     public interface IDeleteContactUsecase
     {
-        Task ExecuteAsync(string id);
+        Task ExecuteAsync(int id);
     }
 }

@@ -2,17 +2,31 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             x:Class="Contman.MAUI.Views.Controls.ContactControl">
+             xmlns:vm="clr-namespace:Contman.MAUI.ViewModels"
+             x:DataType="vm:ContactViewModel"
+             x:Class="Contman.MAUI.Views.Controls.ContactControl"
+             x:Name="control">
+    <ContentView.Resources>
+        <Style x:Key="InvalidEntryStyle" TargetType="Entry">
+            <Setter Property="TextColor" Value="Red" />
+        </Style>
+        <Style x:Key="ValidEntryStyle" TargetType="Entry">
+            <Setter Property="TextColor" Value="Green" />
+        </Style>
+    </ContentView.Resources>
     <VerticalStackLayout Spacing="10" Margin="15, 10, 0, 0">
         <Frame Padding="10, 2, 10, 2">
             <HorizontalStackLayout>
                 <Label Text="Name" VerticalOptions="Center" WidthRequest="60"/>
-                <Entry x:Name="entryName" VerticalOptions="Center">
+                <Entry VerticalOptions="Center" Text="{Binding Contact.Name}">
                     <Entry.Behaviors>
                         <toolkit:TextValidationBehavior 
-                         x:Name="entryNameValidator"
-                         Flags="ValidateOnAttaching,ValidateOnValueChanged"
-                         MinimumLength="3"    
+                             x:Name="entryNameValidator"
+                             InvalidStyle="{StaticResource InvalidEntryStyle}"  
+                             ValidStyle="{StaticResource ValidEntryStyle}"
+                             Flags="ValidateOnValueChanged"
+                             MinimumLength="3"   
+                             IsValid="{Binding IsNameProvided}"
                      />
                     </Entry.Behaviors>
                 </Entry>
@@ -22,21 +36,33 @@
         <Frame Padding="10, 2, 10, 2">
             <HorizontalStackLayout>
                 <Label Text="Email" VerticalOptions="Center" WidthRequest="60"/>
-                <Entry x:Name="entryEmail" VerticalOptions="Center">
+                <Entry VerticalOptions="Center" Text="{Binding Contact.Email}">
                     <Entry.Behaviors>
-                        <toolkit:MultiValidationBehavior 
-                         x:Name="entryEmailValidator"
-                         Flags="ValidateOnAttaching,ValidateOnValueChanged">
-                            <toolkit:TextValidationBehavior
-                             Flags="ValidateOnAttaching,ValidateOnValueChanged" 
-                             MinimumLength="3" 
-                             toolkit:MultiValidationBehavior.Error="Email is required!"
-                          />
-                            <toolkit:EmailValidationBehavior
-                             Flags="ValidateOnAttaching,ValidateOnValueChanged" 
-                             toolkit:MultiValidationBehavior.Error="Email format is invalid!"
-                          />
-                        </toolkit:MultiValidationBehavior>
+                        <toolkit:EmailValidationBehavior
+                          DecorationFlags="Trim,NullToEmpty"
+                          Flags="ValidateOnValueChanged" 
+                          toolkit:MultiValidationBehavior.Error="Email format is invalid!"
+                          IsValid="{Binding IsEmailValid}"
+                        />        
+                        <!-- 
+                            <toolkit:MultiValidationBehavior 
+                                 x:Name="entryEmailValidator"
+                                 InvalidStyle="{StaticResource InvalidEntryStyle}"  
+                                 ValidStyle="{StaticResource ValidEntryStyle}"
+                                 Flags="ValidateOnValueChanged">
+                                    <toolkit:TextValidationBehavior
+                                     Flags="ValidateOnAttaching,ValidateOnValueChanged" 
+                                     toolkit:MultiValidationBehavior.Error="Email is required!"
+                                     IsValid="{Binding IsEmailProvided}"
+                                     />
+                                <toolkit:EmailValidationBehavior
+                                        DecorationFlags="Trim,NullToEmpty"
+                                     Flags="ValidateOnValueChanged" 
+                                     toolkit:MultiValidationBehavior.Error="Email format is invalid!"
+                                     IsValid="{Binding IsEmailValid}"
+                                     />
+                            </toolkit:MultiValidationBehavior>
+                        -->
                     </Entry.Behaviors>
                 </Entry>
             </HorizontalStackLayout>
@@ -45,19 +71,32 @@
         <Frame Padding="10, 2, 10, 2">
             <HorizontalStackLayout>
                 <Label Text="Phone" VerticalOptions="Center" WidthRequest="60"/>
-                <Entry x:Name="entryPhone" VerticalOptions="Center"/>
+                <Entry VerticalOptions="Center" Text="{Binding Contact.Phone}" Keyboard="Numeric">
+                    <Entry.Behaviors>
+                        <toolkit:MaskedBehavior Mask="XXX-XXX-XXXXXXX" UnmaskedCharacter="-" />
+                        <!--
+                            <toolkit:NumericValidationBehavior 
+                                 x:Name="entryPhoneValidator"
+                                 InvalidStyle="{StaticResource InvalidEntryStyle}"  
+                                 ValidStyle="{StaticResource ValidEntryStyle}"
+                                 Flags="ValidateOnValueChanged"
+                                 IsValid="{Binding IsPhoneProvided}"
+                            />
+                        -->
+                    </Entry.Behaviors>
+                </Entry>
             </HorizontalStackLayout>
         </Frame>
 
         <Frame Padding="10, 2, 10, 2">
             <HorizontalStackLayout>
                 <Label Text="Address" VerticalOptions="Center" WidthRequest="60"/>
-                <Entry x:Name="entryAddress" VerticalOptions="Center"/>
+                <Entry VerticalOptions="Center" Text="{Binding Contact.Address}"/>
             </HorizontalStackLayout>
         </Frame>
-        <Button x:Name="btnSave" Text="Save" Clicked="btnSave_Clicked"/>
 
-        <Button x:Name="btnCancel" Text="Cancel" Clicked="btnCancel_Clicked"/>
+        <Button Text="Save" Command="{Binding UpsertContactCommand}" />
+        <Button Text="Cancel" Command="{Binding BackToContactListCommand}" />
 
     </VerticalStackLayout>
 </ContentView>

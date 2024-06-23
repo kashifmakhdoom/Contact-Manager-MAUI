@@ -3,6 +3,7 @@ using Contman.Application.Interfaces;
 using Contman.Application.Interfaces.Datastore;
 using Contman.Application.Usecases;
 using Contman.Infrastructure.Implementations.Datastore;
+using Contman.MAUI.ViewModels;
 using Contman.MAUI.Views;
 using Microsoft.Extensions.Logging;
 
@@ -29,13 +30,18 @@ namespace Contman.MAUI
 
             // Repositories
             builder.Services.AddSingleton<IContactRepository, ContactInMemoryRepository>();
+            //builder.Services.AddSingleton<IContactRepository, ContactSqliteRepository>();
 
-            // Usecases
+            // UseCases
             builder.Services.AddSingleton<IViewContactListUsecase, ViewContactListUsecase>();
             builder.Services.AddSingleton<IViewContactUsecase, ViewContactUsecase>();
             builder.Services.AddTransient<IAddContactUsecase, AddContactUsecase>();
             builder.Services.AddTransient<IEditContactUsecase, EditContactUsecase>();
             builder.Services.AddTransient<IDeleteContactUsecase, DeleteContactUsecase>();
+
+            // ViewModels
+            builder.Services.AddSingleton<ContactListViewModel>();
+            builder.Services.AddSingleton<ContactViewModel>();
 
             // Pages
             builder.Services.AddSingleton<ContactList>();

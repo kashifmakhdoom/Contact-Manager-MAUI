@@ -10,9 +10,9 @@ namespace Contman.Application.Interfaces.Datastore
     public interface IContactRepository
     {
         Task<List<Contact>> GetAllAsync(string filter);
-        Task<Contact> GetByIdAsync(string id);
+        Task<Contact> GetByIdAsync(int id);
         Task AddAsync(Contact contact);
-        Task UpdateAsync(string id, Contact contact);
-        Task DeleteAsync(string id);
+        Task UpdateAsync(int id, Contact contact);
+        Task DeleteAsync(int id);
     }
 }

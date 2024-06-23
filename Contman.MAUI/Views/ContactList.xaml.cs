@@ -1,5 +1,6 @@
 
 using Contman.Application.Interfaces;
+using Contman.MAUI.ViewModels;
 using System.Collections.ObjectModel;
 using Contact = Contman.Core.Models.Contact;
 
@@ -7,9 +8,25 @@ namespace Contman.MAUI.Views;
 
 public partial class ContactList : ContentPage
 {
-    private readonly IViewContactListUsecase _viewContactListUsecase;
-    private readonly IDeleteContactUsecase _deleteContactUsecase;
+    private readonly ContactListViewModel _contactListViewModel;
+    //private readonly IViewContactListUsecase _viewContactListUsecase;
+    //private readonly IDeleteContactUsecase _deleteContactUsecase;
 
+    public ContactList(ContactListViewModel contactListViewModel)
+    {
+        InitializeComponent();
+        _contactListViewModel = contactListViewModel;
+
+        BindingContext = _contactListViewModel;
+    }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        await _contactListViewModel.LoadContactListAsync();
+    }
+
+    /*
     public ContactList(IViewContactListUsecase viewContactListUsecase, 
         IDeleteContactUsecase deleteContactUsecase)
 	{
@@ -66,5 +83,6 @@ public partial class ContactList : ContentPage
         var contactList = new ObservableCollection<Contact>(await _viewContactListUsecase.ExecuteAsync(searchBar.Text));
         lsvContactList.ItemsSource = contactList;
     }
+    */
 
 }

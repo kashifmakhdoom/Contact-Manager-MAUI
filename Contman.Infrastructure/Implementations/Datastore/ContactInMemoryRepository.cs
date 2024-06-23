@@ -16,9 +16,9 @@ namespace Contman.Infrastructure.Implementations.Datastore
         {
             _contactList = new List<Contact>()
             {
-                new() {Id="0001", Name="Joh Doe", Email="john@email.com", Phone="555-75757", Address=""},
-                new() {Id="0002", Name="Jane Doe", Email="jane@email.com", Phone="666-76767", Address=""},
-                new() {Id="0003",Name="Tom Hanks", Email="tom@email.com", Phone="777-35353", Address = ""},
+                new() {Id=1, Name="John Doe", Email="john@email.com", Phone="555-75757", Address=""},
+                new() {Id=2, Name="Jane Doe", Email="jane@email.com", Phone="666-76767", Address=""},
+                new() {Id=3,Name="Tom Hanks", Email="tom@email.com", Phone="777-35353", Address = ""},
             };
 
         }
@@ -43,7 +43,7 @@ namespace Contman.Infrastructure.Implementations.Datastore
             return Task.FromResult(contactList)!;
         }
 
-        public Task<Contact> GetByIdAsync(string id)
+        public Task<Contact> GetByIdAsync(int id)
         {
             var contact = _contactList.FirstOrDefault(x => x.Id == id);
             
@@ -55,15 +55,15 @@ namespace Contman.Infrastructure.Implementations.Datastore
 
         public Task AddAsync(Contact contact)
         {
-            var maxId = int.Parse(_contactList.Max(x => x.Id)) + 1;
+            var maxId = _contactList.Max(x => x.Id) + 1;
 
-            contact.Id = maxId.ToString().PadLeft(4, '0');
+            contact.Id = maxId;
             _contactList.Add(contact);
 
             return Task.CompletedTask;
         }
 
-        public Task UpdateAsync(string id, Contact contact)
+        public Task UpdateAsync(int id, Contact contact)
         {
             if (id != contact.Id) return Task.CompletedTask;
 
@@ -80,7 +80,7 @@ namespace Contman.Infrastructure.Implementations.Datastore
             return Task.CompletedTask;
         }
 
-        public Task DeleteAsync(string id)
+        public Task DeleteAsync(int id)
         {
             var contact = _contactList.FirstOrDefault(x => x.Id == id);
             if (contact is not null)

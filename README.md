@@ -58,12 +58,15 @@ Contact Manager is a MAUI based mobile CRUD application for managing contacts.
 Features include:
 
 - MAUI Cross Plateform Mobile App
-- Clean Architecture Project Structure
+- MVVM using Microsoft CommunityToolkit 
+- Clean Architecture Structure
+- AspNetCore 8.0 Minimal APIs
+- Sqlite Database
 
 Upcoming Features / Fixes:
 
-- TODO: UraniumUI, CommunityToolkit MVVM to be added
-- TODO: Backend ASP.NET Core Minimal API to be added 
+- TODO: UraniumUI, Xceed Toolkit to be added
+- Splash, Authentication, Authorization using Firebase auth
 - Further improvements, error fixing, code refactoring, etc.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
@@ -145,6 +148,7 @@ Used resources:
 - [MAUI Official Documenation](https://learn.microsoft.com/en-us/dotnet/maui/?view=net-maui-8.0)
 - [Community Toolkit Documenation](https://learn.microsoft.com/en-us/dotnet/communitytoolkit/maui/)
 - [UraniumUI](https://github.com/enisn/UraniumUI)
+- [Xceed-Toolkit](https://xceed.com/en/news-chronicles/news/xceed-toolkit-maui-enhanced-controls)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 

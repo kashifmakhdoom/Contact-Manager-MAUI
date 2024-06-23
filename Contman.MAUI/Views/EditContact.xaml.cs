@@ -1,5 +1,4 @@
-using Contman.Application.Interfaces;
-using Contman.Application.Usecases;
+using Contman.MAUI.ViewModels;
 using Contact = Contman.Core.Models.Contact;
 namespace Contman.MAUI.Views;
 
@@ -7,55 +6,36 @@ namespace Contman.MAUI.Views;
 public partial class EditContact : ContentPage
 {
     private Contact _contact;
-    private readonly IViewContactUsecase _viewContactUsecase;
-    private readonly IEditContactUsecase _editContactUsecase;
+    private readonly ContactViewModel _contactViewModel;
+   
+    public EditContact(ContactViewModel contactViewModel)
+    {
+        InitializeComponent();
+        _contactViewModel = contactViewModel;
 
-    public EditContact(
-        IViewContactUsecase viewContactUsecase,
-        IEditContactUsecase editContactUsecase
-    )
-	{
-		InitializeComponent();
-        _viewContactUsecase = viewContactUsecase;
-        _editContactUsecase = editContactUsecase;
+        // Set the binding context
+        BindingContext = contactViewModel;
     }
 
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        _contactViewModel.IsEditMode = true;
+
+    }
     public string ContactId
     {
         set
         {
-            _contact = _viewContactUsecase.ExecuteAsync(value).GetAwaiter().GetResult();
-
-            if (_contact is not null)
+            if(!string.IsNullOrEmpty(value) && int.TryParse(value, out int contactId))
             {
-                ctrlContact.Name = _contact.Name;
-                ctrlContact.Email = _contact.Email;
-                ctrlContact.Phone = _contact.Phone;
-                ctrlContact.Address = _contact.Address;
-            };
-
+                LoadContact(contactId);
+            }
         }
     }
 
-    private async void ctrlContact_OnSave(object sender, EventArgs e)
+    private async void LoadContact(int id)
     {
-        _contact.Name = ctrlContact.Name;
-        _contact.Email = ctrlContact.Email;
-        _contact.Phone = ctrlContact.Phone;
-        _contact.Address = ctrlContact.Address;
-
-        await _editContactUsecase.ExecuteAsync(_contact.Id, _contact);
-
-        await Shell.Current.GoToAsync($"//{nameof(ContactList)}");
-    }
-
-    private void ctrlContact_OnCancel(object sender, EventArgs e)
-    {
-        Shell.Current.GoToAsync($"//{nameof(ContactList)}");
-    }
-
-    private void ctrlContact_OnError(object sender, string e)
-    {
-        DisplayAlert("Error", e, "OK");
+        await _contactViewModel.LoadContact(id);
     }
 }

@@ -12,7 +12,7 @@ namespace Contman.Application.Usecases
         {
             _contactRepository = contactRepository;
         }
-        public async Task ExecuteAsync(string id)
+        public async Task ExecuteAsync(int id)
         {
             await _contactRepository.DeleteAsync(id);
         }

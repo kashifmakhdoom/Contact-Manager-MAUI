@@ -1,87 +1,39 @@
-using static System.Runtime.InteropServices.JavaScript.JSType;
+
+using Contman.MAUI.ViewModels;
+using System.Runtime.CompilerServices;
 
 namespace Contman.MAUI.Views.Controls;
 
 public partial class ContactControl : ContentView
 {
-    public event EventHandler<string> OnError;
-    public event EventHandler<EventArgs> OnSave;
-    public event EventHandler<EventArgs> OnCancel;
+
     public ContactControl()
-	{
-		InitializeComponent();
-	}
-
-    public string Name { 
-		get 
-		{
-			return entryName.Text;
-		}
-		set 
-		{ 
-			entryName.Text = value;
-		} 
-	}
-
-    public string Email
     {
-        get
-        {
-            return entryEmail.Text;
-        }
-        set
-        {
-            entryEmail.Text = value;
-        }
+        InitializeComponent();
     }
 
-    public string Phone
+    /*
+    protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
     {
-        get
-        {
-            return entryPhone.Text;
-        }
-        set
-        {
-            entryPhone.Text = value;
-        }
-    }
+        base.OnPropertyChanged(propertyName);
 
-    public string Address
-    {
-        get
+        try
         {
-            return entryAddress.Text;
-        }
-        set
-        {
-            entryAddress.Text = value;
-        }
-    }
-
-    private void btnSave_Clicked(object sender, EventArgs e)
-    {
-
-        if (entryNameValidator.IsNotValid)
-        {
-            OnError?.Invoke(sender, "Name is required!");
-            return;
-        }
-        if (entryEmailValidator.IsNotValid)
-        {
-            foreach (var error in entryEmailValidator.Errors)
+            if (IsEditMode)
             {
-                OnError?.Invoke(sender, error.ToString());
+                btnSave.SetBinding(Button.CommandProperty, "EditContactCommand");
+            }
+            else
+            {
+                btnSave.SetBinding(Button.CommandProperty, "AddContactCommand");
             }
 
-            return;
         }
-
-        OnSave?.Invoke(sender, e);
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex?.InnerException?.ToString());
+            throw;
+        }
     }
-
-    private void btnCancel_Clicked(object sender, EventArgs e)
-    {
-        OnCancel?.Invoke(sender, e);
-    }
+    */
 }
